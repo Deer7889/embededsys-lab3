@@ -1,30 +1,27 @@
-#include "mbed.h"
-#include "MMA7660.h"
+#include "mbed.h"       //mbed library
+#include "MMA7660.h"    //accelerometer library
 
-#define PI 3.1415926
+#define PI 3.1415926    //set value for ╥ 
 
-MMA7660 MMA(p28, p27);
-DigitalOut connectionLed(LED1);
+MMA7660 MMA(p28, p27);          //define accelerometer pins
+DigitalOut connectionLed(LED1); //define LED1 as connectionLed
 
-float calculateAngle(float x, float y, float z)
-{
-    float angle = 0;
-    float bott_part=sqrt((y*y)+(z*z));    
+float calculateAngle(float x, float y, float z) //define variables and calculateAngle
+{                      //start angle calculation loop
+    float angle = 0;                    //set angle to 0
+    float bott_part=sqrt((y*y)+(z*z));  //calculations under division bar
+    angle=atan(x/bott_part);            //trigomoetric function application
+    angle=(angle*180)/PI;               //convert angle to dergees for printout
+     return angle;                      //terminate function and return value
+}                       //end float calculation loop
 
-    angle=atan(x/bott_part);
-    angle=(angle*180)/PI;
-     return angle; 
-}
+int main() {            //start main program
 
-int main()
-{ 
-    if (MMA.testConnection())
-        connectionLed = 1;
+    if (MMA.testConnection())   //check accelerometer connected
+        connectionLed = 1;      //light LED1 if connected
         
-    while(1)
-    {
-        printf("angle is %f \r\n", calculateAngle(MMA.x(), MMA.y(), MMA.z()));
-        wait(1);
-    }
-}
-
+    while(1)                //while loop for lcd print out
+    {                       //start print loop     
+        printf("angle is %f \r\n", calculateAngle(MMA.x(), MMA.y(), MMA.z())); //print angle to lcd
+        wait(1);                //wait to read lcd
+    }                       //close print loop
